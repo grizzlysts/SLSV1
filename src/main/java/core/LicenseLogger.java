@@ -28,7 +28,7 @@ public class LicenseLogger {
 
         Properties props = new Properties();
         try {
-            props.load(new FileInputStream("/etc/slsv1/config/db.properties"));
+            props.load(new FileInputStream("./db.properties"));
             user = props.getProperty("user");
             password = props.getProperty("password");
             url = props.getProperty("dburl");
