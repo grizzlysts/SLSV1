@@ -1,6 +1,8 @@
 package server;
 
 import java.util.concurrent.atomic.AtomicLong;
+
+import core.LicenseLogger;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -17,7 +19,9 @@ public class LicenseController {
 
     @RequestMapping("/validatelicense")
     public License license(@RequestParam(value="licensekey") String licensekey, @RequestParam(value="url") String url, @RequestParam(value="version") String version) {
-       return new License(counter.incrementAndGet(), licensekey, url, version);
+       License license = new License(counter.incrementAndGet(), licensekey, url, version);
+       LicenseLogger.addLicenseEntry(license);
+       return license;
     }
 
 }

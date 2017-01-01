@@ -14,7 +14,7 @@ public class App {
 
     @RequestMapping("/")
     String home() {
-        return "Hello World!";
+        return "Synthia Licensing Server V1.0";
     }
 
     public static void main(String[] args){
