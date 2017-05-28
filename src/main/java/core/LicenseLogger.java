@@ -23,33 +23,17 @@ public class LicenseLogger {
 
     public static void addLicenseEntry(License license){
 
-        PreparedStatement stmt = null;
-        Connection conn = null;
-
-        Properties props = new Properties();
-        try {
-            props.load(new FileInputStream("./db.properties"));
-            user = props.getProperty("user");
-            password = props.getProperty("password");
-            url = props.getProperty("dburl");
-            conn = DriverManager.getConnection(url, user, password);
-            stmt = conn.prepareStatement("insert into licenselog (licensekey, url, version, entrydate) values (?,?,?,?)");
+        try(Connection conn = DriverManager.getConnection(Config.getProp("dburl"), Config.getProp("user"), Config.getProp("password"))) {
+            PreparedStatement stmt = conn.prepareStatement("insert into licenselog (licensekey, url, version, entrydate) values (?,?,?,?)");
             stmt.setString(1, license.getLicenseKey());
             stmt.setString(2, license.getUrl());
             stmt.setString(3, license.getVersion());
-            stmt.setDate(4, new java.sql.Date(Calendar.getInstance().getTime().getTime()));
+            stmt.setDate(4, license.getDate());
             boolean success = stmt.execute();
             System.out.println("Log Entry Added");
 
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
         } catch (SQLException e) {
             e.printStackTrace();
-        } finally {
-            try { if (stmt != null) stmt.close(); } catch (Exception e) {};
-            try { if (conn != null) conn.close(); } catch (Exception e) {};
         }
     }
 
